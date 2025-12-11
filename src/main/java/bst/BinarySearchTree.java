@@ -42,6 +42,12 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     private void preorderRecursive(TreeNode<T> node, List<T> out) {
+        if (node == null)
+            return;
+
+        out.add(node.value);
+        preorderRecursive(node.left, out);
+        preorderRecursive(node.right, out);
         // TODO: implement Preorder: Root -> Left -> Right
         // hint: check for null, then visit node, then recurse on left and right
     }
@@ -53,6 +59,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     private void inorderRecursive(TreeNode<T> node, List<T> out) {
+        if (node == null)
+            return;
+        inorderRecursive(node.left, out);
+        out.add(node.value);
+        inorderRecursive(node.right, out);
         // TODO: implement Inorder: Left -> Root -> Right
     }
 
@@ -63,6 +74,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     private void postorderRecursive(TreeNode<T> node, List<T> out) {
+        if (node == null)
+            return;
+        postorderRecursive(node.left, out);
+        postorderRecursive(node.right, out);
+        out.add(node.value);
         // TODO: implement Postorder: Left -> Right -> Root
     }
 
@@ -70,6 +86,21 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     public List<T> levelOrder() {
         List<T> result = new ArrayList<>();
+        if (root == null)
+            return result;
+
+        Queue<TreeNode<T>> q = new ArrayDeque<>();
+        q.add(root);
+
+        while (!q.isEmpty()) {
+            TreeNode<T> node = q.remove();
+            result.add(node.value);
+
+            if (node.left != null)
+                q.add(node.left);
+            if (node.right != null)
+                q.add(node.right);
+        }
         // TODO: implement level-order using a Queue<TreeNode<T>>
         // 1. if root is null, return empty list
         // 2. enqueue root
@@ -83,11 +114,16 @@ public class BinarySearchTree<T extends Comparable<T>> {
     // --------- Unified API via TraversalType ----------
 
     public List<T> getByTraversal(TraversalType type) {
+        return switch (type) {
+            case PREORDER -> preorderRecursive();
+            case INORDER -> inorderRecursive();
+            case POSTORDER -> postorderRecursive();
+            case LEVEL_ORDER ->  levelOrder();
+        };
         // TODO: dispatch based on traversal type
 //        return switch (type) {
 //            default ->
 //                throw new IllegalArgumentException("Not implemented yet");
 //        };
-        return new ArrayList<>(); // placeholder
     }
 }

@@ -12,6 +12,20 @@ public class TraversalExercises {
     // Iterative preorder using a stack
     public static <T extends Comparable<T>> List<T> preorderIterative(TreeNode<T> root) {
         List<T> result = new ArrayList<>();
+        if (root == null) return result;
+
+        Deque<TreeNode<T>> stack = new ArrayDeque<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            TreeNode<T> node = stack.pop();
+            result.add(node.value);
+
+            if (node.right != null)
+                stack.push(node.right);
+            if (node.left != null)
+                stack.push(node.left);
+        }
         // TODO: implement iterative preorder using Deque as a stack
         // Hint: push root; while stack not empty:
         //   pop node, visit it, then push right child, then left child
@@ -21,6 +35,18 @@ public class TraversalExercises {
     // Iterative inorder using a stack
     public static <T extends Comparable<T>> List<T> inorderIterative(TreeNode<T> root) {
         List<T> result = new ArrayList<>();
+        Deque<TreeNode<T>> stack = new ArrayDeque<>();
+        TreeNode<T> curr  = root;
+
+        while (curr != null || !stack.isEmpty()) {
+            while (curr != null) {
+                stack.push(curr);
+                curr = curr.left;
+            }
+            curr = stack.pop();
+            result.add(curr.value);
+            curr = curr.right;
+        }
         // TODO: implement iterative inorder
         // Hint: use a pointer 'curr' and a stack:
         //   while (curr != null || !stack.isEmpty()) { ... }
@@ -38,6 +64,19 @@ public class TraversalExercises {
     // Practice version of level-order
     public static <T extends Comparable<T>> List<T> levelOrderUsingQueue(TreeNode<T> root) {
         List<T> result = new ArrayList<>();
+        if (root == null) return result;
+
+        Queue<TreeNode<T>> q = new ArrayDeque<>();
+        q.add(root);
+        while (!q.isEmpty()) {
+            TreeNode<T> node = q.remove();
+            result.add(node.value);
+
+            if (node.left != null)
+                q.add(node.left);
+            if (node.right != null)
+                q.add(node.right);
+        }
         // TODO: implement BFS using a Queue<TreeNode<T>>
         return result;
     }
